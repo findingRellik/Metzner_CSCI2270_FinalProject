@@ -5,21 +5,21 @@ using namespace std;
 
 struct Section{ //Every class has multiple
     string section; //Section name contained within class
-    double sectionWeight; //Individual section of class weight e.g. HW %30 or .30
-    int numGrades; //Number of grades in section e.g. 14 HW assignments throughout the semester
-    double sectionGrades[];//Array of grade entries
-    double gradeSum; // Sum of Grades of section
-    double avgGrade; //AVG. GRADE of section
-    double weightSum; // Avg. Grade X Weight of section
+    double sectionWeight=0; //Individual section of class weight e.g. HW %30 or .30
+    int numGrades=0; //Number of grades in section e.g. 14 HW assignments throughout the semester
+    double *sectionGrades;//Array of grade entries
+    double gradeSum=0; // Sum of Grades of section
+    double avgGrade=0; //AVG. GRADE of section
+    double weightSum=0; // Avg. Grade X Weight of section
 
-    Section()
-    {
-        sectionWeight = 0;
-        numGrades = 0;
-        gradeSum = 0;
-        avgGrade = 0;
-        weightSum = 0;
-    }
+//    Section()
+//    {
+//        sectionWeight = 0;
+//        numGrades = 0;
+//        gradeSum = 0;
+//        avgGrade = 0;
+//        weightSum = 0;
+//    }
 
     Section *next; //Pointer to next section array
 };
@@ -47,35 +47,106 @@ public:
         tail = NULL;
     }
 
+    Section* getSectionWeight(Section *node)//Checks if section weight entered is less than one
+    {
+        double x = -1;
+        while(0 >= x || x > 1)
+        {
+            cout<<"Enter section weight (0-1.00): ";
+            cin>>x; cin.ignore();
+            if( x>0 && x<=1)
+            {
+                node->sectionWeight = x;
+                break;
+            }
+        }
+        int y = -1;
+        while(0 > y)
+        {
+            cout<<"Enter number of grades in section: ";
+            cin>>y; cin.ignore();
+            if(y >=0)
+            {
+                node->numGrades = y;
+                break;
+            }
+        }
+        node->sectionGrades = new double[node->numGrades]; //Creates array for grades for this section
+        return node;
+    }
+
+    Section* validGrade(Section *node, int i)//makes sure grade entry is from 0-100
+    {
+        double x = -1;
+        while(0 > x || x > 100)
+        {
+            cout<<"Enter "<<node->section<<" grade "<<(i+1)<<": ";
+            cin>>x; cin.ignore();
+            if(x>0 && x<=100)
+            {
+                node->sectionGrades[i] = x;
+                node->gradeSum += node->sectionGrades[i];
+                return node;
+            }
+        }
+    }
+
+    Section* getAvg(Section *node)
+    {
+        node->avgGrade = (node->gradeSum/node->numGrades);//Getting Section Average and weighted grade
+        node->weightSum = node->sectionWeight*node->avgGrade;
+        this->totalGrade += node->weightSum;
+        return node;
+    }
+
+    void deleteClass()
+    {
+        Section *current = head;
+        Section *tmp = new Section;
+        if(current != NULL)
+        {
+            cout<<"Deleting "<<this->className<<endl;
+            while(current != NULL)
+            { // Runs until all are deleted
+                tmp = current->next;
+                cout<<"Deleting "<<current->section<<endl;
+                delete current;
+                current = tmp;
+            }
+        head = NULL;
+        }
+        delete current;
+        cout<<"Class successfully deleted"<<endl;
+    }
+
     void addClass()
     {
-        /**Establishing class*/
+        //Establishing class
         cout<<"Enter name of class: ";
         getline(cin, this->className);
         cout<<"Enter number of sections: ";
         cin>>this->numSections; cin.ignore(); cout<<endl;
 
-        /**Establishing each section and grades*/
-        head = new Section;//Instating head as first section of class
-        tail = new Section;
+        //Establishing each section and grades
+        Section* first = new Section;//Instating head as first section of class
+        double finalWeight = 0;
         cout<<"Enter name of section: ";
-        getline(cin, head->section);
-        cout<<"Enter section weight: ";
-        cin>>head->sectionWeight; cin.ignore();
-        cout<<"Enter number of grades in section: ";
-        cin>>head->numGrades; cin.ignore(); cout<<endl;
-        head->sectionGrades[head->numGrades] = {0}; //Creates array for grades for this section
-        for(int i = 1; i <= head->numGrades; i++)//Inputting grades
+        getline(cin, first->section);
+        first = getSectionWeight(first);
+        //head->sectionGrades[head->numGrades] = {0}; //Creates array for grades for this section
+        for(int i = 0; i < first->numGrades; i++)//Inputting grades
         {
-            cout<<"Enter "<<head->section<<" grade "<<i<<": ";
-            cin>>head->sectionGrades[i]; cin.ignore();
-            head->gradeSum += head->sectionGrades[i];
+            first = validGrade(first, i);
             //cout<<"Grade sum "<<head->gradeSum<<endl;
         }
-        head->avgGrade = (head->gradeSum/head->numGrades);//Getting Section Average and weighted grade
-        head->weightSum = head->sectionWeight*head->avgGrade;
-        this->totalGrade += head->weightSum;
-        cout<<"Section average: "<<head->avgGrade<<endl; cout<<endl;
+        for(int i = 0; i < first->numGrades; i++)//Inputting grades
+        {
+            cout<<first->sectionGrades[i]<<"    ";
+        } cout<<endl;
+        first = getAvg(first);
+        finalWeight += first->sectionWeight;
+        cout<<"Section average: "<<first->avgGrade<<endl; cout<<endl;
+        head = first;
 
         Section *current = head;//sets values of each section after head
         for(int i = 1; i < this->numSections-1; i++)
@@ -83,42 +154,43 @@ public:
             Section *tmp = new Section;
             cout<<"Enter name of section: ";
             getline(cin, tmp->section);
-            cout<<"Enter section weight: ";
-            cin>>tmp->sectionWeight; cin.ignore();
-            cout<<"Enter number of grades in section: ";
-            cin>>tmp->numGrades; cin.ignore(); cout<<endl;
-            tmp->sectionGrades[head->numGrades];
-
-            for(int i = 1; i <= tmp->numGrades; i++)//Inputting grades
+            tmp = getSectionWeight(tmp);
+            //tmp->sectionGrades[tmp->numGrades] = {0}; //Creates array for grades for this section
+            for(int i = 0; i < tmp->numGrades; i++)//Inputting grades
             {
-                cout<<"Enter "<<tmp->section<<" grade "<<i<<": ";
-                cin>>tmp->sectionGrades[i]; cin.ignore();
-                tmp->gradeSum += tmp->sectionGrades[i];
+                validGrade(tmp, i);
                 //cout<<"Grade sum "<<tmp->gradeSum<<endl;
             }
-            tmp->avgGrade = (tmp->gradeSum/tmp->numGrades);//Getting Section Average
-            tmp->weightSum = tmp->sectionWeight*tmp->avgGrade;
-            this->totalGrade += tmp->weightSum;
+            for(int i = 0; i < tmp->numGrades; i++)//Inputting grades
+            {
+                cout<<tmp->sectionGrades[i]<<"    ";
+            } cout<<endl;
+            tmp = getAvg(tmp);
+            finalWeight += tmp->sectionWeight;
             cout<<"Section average: "<<tmp->avgGrade<<endl; cout<<endl;
             current->next = tmp;
             current = current->next;
         }
-        /**The final*/
+        //The final
         Section *current2 = new Section;
         current->next = current2;
-        current2->section = "Final"; current2->sectionGrades[1] = {0}; current2->numGrades = 1;
-        string answer = "";
-        while(answer != "y" or answer != "n")
+        if(finalWeight >= 1)
         {
-            cout<<"What is the final's weight?  ";
-            cin>>current2->sectionWeight; cin.ignore();
+            cout<<"Section weight sum must be less than 1"<<endl;
+            return;
+        }
+        current2->section = "Final"; current2->sectionGrades = new double[1]; current2->numGrades = 1;
+        string answer = "";
+        while(answer != "y" && answer != "n")
+        {
+            current2->sectionWeight = 1 - finalWeight; //automatically determines weight of final
             cout<<"Have you taken the final? (y/n)  ";
             getline(cin, answer);
             if(answer == "y")
             {
                 cout<<"What was your score?  ";
                 cin>>current2->avgGrade; cin.ignore();
-                current2->sectionGrades[1] = current2->avgGrade;
+                current2->sectionGrades[0] = current2->avgGrade;
                 current2->gradeSum = current2->avgGrade;
                 current2->weightSum = current2->sectionWeight*current->avgGrade;
                 this->finalTaken = true;
@@ -127,7 +199,7 @@ public:
             }
             else if (answer == "n") break;
         }
-        tail = current2;
+        tail = current2; cout<<endl;
     }
 
     void printGrades()
@@ -147,15 +219,14 @@ public:
                 cout<<"Name of section: "<<current->section;
                 cout<<" | Section weight: "<<current->sectionWeight;
                 cout<<" | Number of grades: "<<current->numGrades<<endl;
-
-                    for(int i = 1; i <= current->numGrades; i++)
-                    {
-                        if(i == 1)
-                            cout<<current->section<<" "<<i<<": ";
-                        else
-                            cout<<" |"<<current->section<<" "<<i<<": ";
-                        cout<<current->sectionGrades[i];
-                    }
+                for(int i = 0; i < current->numGrades; i++)
+                {
+                    if(i == 0)
+                        cout<<current->section<<" "<<(i+1)<<": ";
+                    else
+                        cout<<" | "<<current->section<<" "<<(i+1)<<": ";
+                    cout<<current->sectionGrades[i];
+                }
                 cout<<endl;
                 cout<<"Average grade in this section: "<<current->avgGrade;
                 cout<<" | Weighted grade: "<<current->weightSum<<endl<<endl;
@@ -244,17 +315,41 @@ public:
 
     void changeGrade()//Lets user change grades of a section
     {
-
-        while
-        Section *current = head;
-        double currentGrade = 0; double grade2pass = 0;
-        while(current != tail)
+        string input;
+        while(input != "q")
         {
-            currentGrade += current->weightSum;
-            current = current->next;
+            Section *current = head;
+            cout<<"Enter 'q' to quit editing"<<endl;
+            cout<<"Which section would you like to edit?...  ";
+            getline(cin, input);
+            if(input == "q")
+                return;
+            while(current != NULL)
+            {
+                if(current->section == input)
+                    break;
+                current = current->next;
+            }
+            if(current == NULL)
+                cout<<"Section name not found"<<endl;
+            else
+            {
+                for(int i = 0; i < current->numGrades; i++)
+                {
+                    if(i == 0)
+                        cout<<current->section<<" "<<i<<": ";
+                    else
+                        cout<<" | "<<i<<": ";
+                    cout<<current->sectionGrades[i];
+                } cout<<endl;
+                int index; double newGrade;
+                cout<<"Which grade would you like to change (select number next to grade)?: ";
+                cin>>index; cin.ignore();
+                cout<<"What number would you like to change it to?: ";
+                cin>>newGrade; cin.ignore();
+                current->sectionGrades[index] = newGrade;
+            }
         }
-        grade2pass = (60 - currentGrade)/tail->sectionWeight;
-
     }
 };
 
@@ -264,7 +359,6 @@ int main()
 {
     cout << "Welcome to the Universal Grader!" << endl;
     classGrade *myClass = new classGrade;
-    //Section *head = new Section;
 
     string userInput;
     while(userInput != "11"){
@@ -273,8 +367,9 @@ int main()
         cout<<"2. Calculate class grade"<<endl;
         cout<<"3. Print grades"<<endl;
         cout<<"4. Best and worst section"<<endl;
-        cout<<"5. Minimum grade (on final) to pass"<<endl;cout<<endl;
-        cout<<"4. Delete class"<<endl;
+        cout<<"5. Minimum grade (on final) to pass"<<endl;
+        cout<<"6. Change grade"<<endl;
+        cout<<"7. Delete class"<<endl;
         cout<<"11. Quit"<<endl;
 
         getline(cin,userInput);
@@ -302,6 +397,10 @@ int main()
 //OPTION 6 MINIMUM GRADE ON FINAL TO PASS
         else if(userInput == "6"){
             myClass->changeGrade();
+        }
+//OPTION 7 MINIMUM GRADE ON FINAL TO PASS
+        else if(userInput == "7"){
+            myClass->deleteClass();
         }
 
     }
