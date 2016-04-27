@@ -23,6 +23,7 @@ Parker for fixing the memory allocation problem related to my dynamic array/stru
 Open issues/bugs 
 Bugs:
 If it's asking for a number and you accidentally hit a letter, congrats you broke the program (I used cin>> instead of getline because I hate converting strings).
+After changing a grade need to update values
 Adding on:
 I didn't have time to create a function to add new grades to a section... but then again what's the point if you can't 'save' your class to the computer which was my plan initially using s11n.
 I would like the minimum grade to pass also be minimum grade needed for an A, B, C...etc.
