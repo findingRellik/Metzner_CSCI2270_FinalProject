@@ -13,3 +13,17 @@
 	<iostream>
 	<istream>
 
+1461832038 source:/home/user/Dropbox/CSCI2270/Assignments/Final Project/Metzner_CSCI2270_FinalProject/UGC/classGrade.cpp
+	"classGrade.h"
+	<iostream>
+	<istream>
+
+1461832038 /home/user/Dropbox/CSCI2270/Assignments/Final Project/Metzner_CSCI2270_FinalProject/UGC/classGrade.h
+	<iostream>
+	<istream>
+
+1461884964 source:/home/user/Dropbox/CSCI2270/Assignments/Final Project/Metzner_CSCI2270_FinalProject/UGC/main.cpp
+	<iostream>
+	<istream>
+	"classGrade.h"
+
