@@ -3,14 +3,6 @@
 #include <istream>
 using namespace std;
 
-classGrade::classGrade(string name, int count)
-{
-    className = name;
-    numSections = count;
-    finalTaken = false;
-    head = NULL;
-    tail = NULL;
-}
 classGrade::classGrade()
 {
     head = NULL;
