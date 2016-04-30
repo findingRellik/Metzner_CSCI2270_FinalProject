@@ -11,7 +11,7 @@ int main()
     classGrade *myClass = new classGrade;
 
     string userInput;
-    while(userInput != "9"){
+    while(userInput != "10"){
         cout<<"======Main Menu====="<<endl;
         cout<<"1. Add a class"<<endl;
         cout<<"2. Calculate class grade"<<endl;
@@ -21,7 +21,8 @@ int main()
         cout<<"6. Change grade"<<endl;
         cout<<"7. Delete class"<<endl;
         cout<<"8. Minimum grade (on final) to receive A"<<endl;
-        cout<<"9. Quit"<<endl<<endl<<"~~";
+        cout<<"9. Minimum grade (on final) to receive grade of your choice"<<endl;
+        cout<<"10. Quit"<<endl<<endl<<"~~";
 
         getline(cin,userInput);
 //OPTION 1 ADD A NEW CLASS
@@ -57,7 +58,10 @@ int main()
         else if(userInput == "8"){
             myClass->min2A();
         }
-
+//OPTION 8 MINIMUM GRADE ON FINAL TO EARN A GRADE OF USER'S CHOICE
+        else if(userInput == "9"){
+            myClass->min2grade();
+        }
     }
     cout<<"Later alligator"<<endl;
     delete myClass;
