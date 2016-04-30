@@ -41,6 +41,7 @@ public:
     void min2pass();
     void min2A();
     void changeGrade();
+    void min2grade();
     Section* updateSectionVal(Section *node, int i);
 };
 
