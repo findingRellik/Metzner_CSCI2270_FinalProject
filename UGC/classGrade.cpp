@@ -304,6 +304,52 @@ void classGrade::min2A()//Minimum grade on final needed to pass
     cout<<endl;
 }
 
+void classGrade::min2grade()//Minimum grade on final needed to pass
+{
+    cout<<endl;
+    bool good = false;
+    string grade;
+    int percent = 0;
+    while (good == false){
+        cout<< "Please enter your desired grade from the following: A, B, C, or D."<<endl;
+        cin>>grade; cin.ignore();
+        if (grade == "A" || grade == "a"){
+            percent = 90;
+            good = true;
+        }else if (grade == "B" || grade == "b"){
+            percent = 80;
+            good = true;
+        }else if (grade == "C" || grade == "c"){
+            percent = 70;
+            good = true;
+        }else if (grade == "D" || grade == "d"){
+            percent = 60;
+            good = true;
+        }
+    }
+    cout<<"===MINIMUM GRADE ON FINAL TO GET A(N) "<<grade<<" IN THE CLASS==="<<endl;
+    if(this->finalTaken == true)
+    {
+        cout<<"This operation calculates the minimum score the user needs to pass this class"<<endl;
+        cout<<"The final exam must not have been taken in order to access the function ~"<<endl<<endl;
+        return;
+    }
+    else//If final not taken
+    {
+        Section *current = head;
+        double currentGrade = 0; double grade2pass = 0;
+        while(current != tail)
+        {
+            currentGrade += current->weightSum;
+            current = current->next;
+        }
+        grade2pass = (percent - currentGrade)/tail->sectionWeight;
+        cout<<"Assuming a(n) "<<percent<<" is the deciding point of a(n) "<<grade<<" or not..."<<endl;
+        cout<<"You need a minimum score of "<<grade2pass<<" on the final in order to get a(n) "<<grade<<" in "<<this->className<<endl;
+    }
+    cout<<endl;
+}
+
 void classGrade::changeGrade()//Lets user change grades of a section
 {
     cout<<"===CHANGING GRADES==="<<endl;
