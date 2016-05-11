@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1462385714 source:c:\users\awful\desktop\cufreshman\spring2016\csci_2270\github\metzner_csci2270_finalproject\metzner\main.cpp
+	<iostream>
+	<istream>
+	"classGrade.h"
+
+1462384608 c:\users\awful\desktop\cufreshman\spring2016\csci_2270\github\metzner_csci2270_finalproject\metzner\include\classgrade.h
+	<iostream>
+	<istream>
+
+1462385625 source:c:\users\awful\desktop\cufreshman\spring2016\csci_2270\github\metzner_csci2270_finalproject\metzner\src\classgrade.cpp
+	"classGrade.h"
+	<iostream>
+	<istream>
+	<stdlib.h>
+

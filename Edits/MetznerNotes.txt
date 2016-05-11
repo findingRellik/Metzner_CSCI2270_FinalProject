@@ -1,0 +1,6 @@
+-Program crashes when class is not loaded and when
+given unexpected inputs
+-I did not fix these issues but I did add a
+functionality to calculate any% grade for the final
+-I'm putting the edits in a new folder so you can
+choose whether or not to keep them
